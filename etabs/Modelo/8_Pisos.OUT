@@ -160,7 +160,7 @@
   JOINTS              UX  UY  UZ  RX  RY  RZ
        1 TO     288    +   +   A   A   A   +
      289 TO     324    -   -   -   -   -   -
-     333 TO     340    +   +   -   -   -   +
+     325 TO     332    +   +   -   -   -   +
     NULL                                    
 
   CONSTRAINTS         U1  U2  U3  R1  R2  R3
