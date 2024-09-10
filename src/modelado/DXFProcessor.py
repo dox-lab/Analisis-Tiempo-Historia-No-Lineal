@@ -1,7 +1,6 @@
-
 import ezdxf
 
-def function_dxf(title_file):
+def DXFProcessor(title_file):
     doc = ezdxf.readfile(title_file)
     msp = doc.modelspace()
 
@@ -22,21 +21,17 @@ def function_dxf(title_file):
 
     Nodes = []
     tag_nodes = 0
-    Diap = []
-    tag_diag = 1000
-    Rest = []
 
     for p in points:
-        if p[0].split("_")[2] == "cent" or p[0].split("_")[2] == "restr":
-            Nodes.append([tag_nodes, p[1], p[2], p[3]])
-            tag_nodes = tag_nodes +1
-        elif p[0].split("_")[2] == "CM":
-            Diap.append([tag_diag, p[1], p[2], p[3]])
-            tag_diag = tag_diag +1
-
-    for p in Nodes:
-        if p[3] == 0:
-            Rest.append(p)
+        if p[0].split("_")[2] == "centrales":
+            Nodes.append([tag_nodes, p[1], p[2], p[3], 1])
+            tag_nodes += 1
+        elif p[0].split("_")[2] == "esquinero":
+            Nodes.append([tag_nodes, p[1], p[2], p[3], 0.5])
+            tag_nodes += 1
+        elif p[0].split("_")[2] == "externo":
+            Nodes.append([tag_nodes, p[1], p[2], p[3], 0.25])
+            tag_nodes += 1
 
     for li in lines:
         li[1][0] = round(li[1][0], 3)
@@ -91,25 +86,22 @@ def function_dxf(title_file):
     nsec_vig = len(Vig) 
     nsec_col = len(Col)
 
-    Mx = []
-    My = []
     for pl in polines:
         if pl[0].split("_")[1] == "Mx":
-            Mx.append([float(pl[0].split("_")[2]), pl[1], pl[2], pl[3], pl[4]])
             Elems.append([n_elems_init, pl[1], pl[2], pl[3], pl[4], 3, float(pl[0].split("_")[2])])
             n_elems_init = n_elems_init +1
         if pl[0].split("_")[1] == "My":
-            My.append([float(pl[0].split("_")[2]), pl[1], pl[2], pl[3], pl[4]])
             Elems.append([n_elems_init, pl[1], pl[2], pl[3], pl[4], 4, float(pl[0].split("_")[2])])
             n_elems_init = n_elems_init +1
 
-    nz = len(Diap)
-    dz = Diap[1][3] - Diap[0][3]
+    for node in Nodes:
+        node[1:4] = [abs(round(coord, 2)) for coord in node[1:4]]
 
-    return Nodes, Elems, Diap, Vig, Col, Mx, My, nsec_vig, nsec_col, nz, dz
-
-
-Nodes, Elems, Diap, Vig, Col, Mx, My, nsec_vig, nsec_col, nz, dz= function_dxf("EDIFICIO_LP_v4.dxf")
-
-for elem in Elems:
-    print(elem)
+    return {
+        "Nodes": Nodes,
+        "Elems": Elems,
+        "sec_vig": Vig,
+        "sec_col": Col,
+        "nsec_sec_vig": nsec_vig,
+        "nsec_sec_col": nsec_col
+    }
