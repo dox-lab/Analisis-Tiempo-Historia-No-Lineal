@@ -1,0 +1,164 @@
+\begin{thebibliography}{}
+
+\bibitem [\protect \citeauthoryear {%
+Bommer%
+, Salazar%
+\BCBL {}\ \BBA {} Samayoa%
+}{%
+Bommer%
+\ \protect \BOthers {.}}{%
+{\protect \APACyear {1998}}%
+}]{%
+bommer1998}
+\APACinsertmetastar {%
+bommer1998}%
+\begin{APACrefauthors}%
+Bommer, J.%
+, Salazar, W.%
+\BCBL {}\ \BBA {} Samayoa, R.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{1998}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Riesgo sísmico en la región metropolitana de San
+  Salvador} {Riesgo sísmico en la región metropolitana de san
+  salvador}.{\BBCQ}
+\newblock
+\APACjournalVolNumPages{Programa Salvadoreño de Investigación sobre
+  Desarrollo y Medio Ambiente (PRISMA)}{}{}{}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Bonett~Díaz%
+}{%
+Bonett~Díaz%
+}{%
+{\protect \APACyear {2003}}%
+}]{%
+bonett2003}
+\APACinsertmetastar {%
+bonett2003}%
+\begin{APACrefauthors}%
+Bonett~Díaz, R\BPBI L.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYear{2003}.
+\unskip\
+\newblock
+\APACrefbtitle {Vulnerabilidad y riesgo sísmico de edificios. Aplicación a
+  entornos urbanos en zonas de amenaza alta y moderada} {Vulnerabilidad y
+  riesgo sísmico de edificios. aplicación a entornos urbanos en zonas de
+  amenaza alta y moderada}\ \APACtypeAddressSchool {\BUPhD}{}{}.
+\unskip\
+\newblock
+\APACaddressSchool {}{Universitat Politècnica de Catalunya}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Choi%
+, Grandhi%
+\BCBL {}\ \BBA {} Canfield%
+}{%
+Choi%
+\ \protect \BOthers {.}}{%
+{\protect \APACyear {2006}}%
+}]{%
+choi2006}
+\APACinsertmetastar {%
+choi2006}%
+\begin{APACrefauthors}%
+Choi, S\BPBI K.%
+, Grandhi, R.%
+\BCBL {}\ \BBA {} Canfield, R\BPBI A.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYear{2006}.
+\newblock
+\APACrefbtitle {Reliability-based structural design} {Reliability-based
+  structural design}.
+\newblock
+\APACaddressPublisher{}{Springer Science \& Business Media}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Hanganu%
+}{%
+Hanganu%
+}{%
+{\protect \APACyear {1997}}%
+}]{%
+hanganu1997}
+\APACinsertmetastar {%
+hanganu1997}%
+\begin{APACrefauthors}%
+Hanganu, D\BPBI A.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYear{1997}.
+\unskip\
+\newblock
+\APACrefbtitle {Análisis no lineal estático y dinámico de estructuras de
+  hormigón armado mediante modelos de daño} {Análisis no lineal estático y
+  dinámico de estructuras de hormigón armado mediante modelos de daño}\
+  \APACtypeAddressSchool {\BUPhD}{}{}.
+\unskip\
+\newblock
+\APACaddressSchool {}{Universitat Politècnica de Catalunya (UPC)}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Ramírez%
+}{%
+Ramírez%
+}{%
+{\protect \APACyear {2007}}%
+}]{%
+ramirez2007}
+\APACinsertmetastar {%
+ramirez2007}%
+\begin{APACrefauthors}%
+Ramírez, F\BPBI O\BPBI P.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYear{2007}.
+\newblock
+\APACrefbtitle {Introducción a las series de tiempo. Métodos paramétricos}
+  {Introducción a las series de tiempo. métodos paramétricos}.
+\newblock
+\APACaddressPublisher{}{Universidad de Medellín}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Zhu%
+, McKenna%
+\BCBL {}\ \BBA {} Scott%
+}{%
+Zhu%
+\ \protect \BOthers {.}}{%
+{\protect \APACyear {2018}}%
+}]{%
+zhu2018}
+\APACinsertmetastar {%
+zhu2018}%
+\begin{APACrefauthors}%
+Zhu, M.%
+, McKenna, F.%
+\BCBL {}\ \BBA {} Scott, M\BPBI H.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2018}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {OpenSeesPy: Python library for the OpenSees finite
+  element framework} {Openseespy: Python library for the opensees finite
+  element framework}.{\BBCQ}
+\newblock
+\APACjournalVolNumPages{SoftwareX}{7}{}{6-11}.
+\PrintBackRefs{\CurrentBib}
+
+\end{thebibliography}

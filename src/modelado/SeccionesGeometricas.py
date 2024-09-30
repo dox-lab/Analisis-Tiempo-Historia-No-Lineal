@@ -1,3 +1,5 @@
+from unidades import *
+
 class SeccionesGeometricas:
     """
     Clase base para calcular las propiedades geométricas de diferentes tipos de secciones.
@@ -69,3 +71,45 @@ class SeccionRectangular(SeccionesGeometricas):
         beta = 1 / 3 - 0.21 * bb / aa * (1 - (bb / aa)**4 / 12)  # Factor de corrección beta
         Jxx = beta * bb**3 * aa  # Momento polar calculado usando el factor beta
         return Jxx
+
+
+class Muro(SeccionesGeometricas):
+    """
+    Clase para calcular las propiedades geométricas de un muro.
+    Hereda de SeccionesGeometricas.
+    """
+    def __init__(self, l, t):
+        self.l = l  # Longitud del muro
+        self.t = t  # Espesor del muro
+
+    def calc_area(self):
+        return self.l * self.t  # Área del muro
+
+    def calc_inercia(self):
+        Iz = self.t * self.l**3 / 12  # Momento de inercia respecto al eje Z
+        Iy = self.l * self.t**3 / 12  # Momento de inercia respecto al eje Y
+        return Iz, Iy
+
+    def calc_mom_polar(self):
+        aa, bb = max(self.l, self.t), min(self.l, self.t)
+        beta = 1 / 3 - 0.21 * bb / aa * (1 - (bb / aa)**4 / 12)
+        Jxx = beta * bb**3 * aa
+        return Jxx
+
+    def prop_muros(self):
+        """
+        Calcula las propiedades específicas del muro en la dirección X.
+        """
+        lm = self.l * m  # Longitud del muro en metros
+        tm = self.t * m  # Espesor del muro en metros
+        w = 50 * cm  # Ancho de discretización
+        nf = int(round(lm / w))
+        
+        # Crear listas para espesores, anchos, cuantías y materiales
+        thk = [tm for _ in range(nf)]
+        w_list = [lm / nf for _ in range(nf)]
+        rho = [0.01 if i == 0 or i == nf - 1 else 0.0064 for i in range(nf)]
+        conc = [4 if i == 0 or i == nf - 1 else 5 for i in range(nf)]
+        steel = [6 for _ in range(nf)]
+        
+        return nf, thk, w_list, rho, conc, steel

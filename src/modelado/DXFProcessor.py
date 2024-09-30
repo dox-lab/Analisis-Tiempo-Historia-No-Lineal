@@ -1,107 +1,126 @@
 import ezdxf
 
 def DXFProcessor(title_file):
+    # Leer archivo DXF y obtener el espacio del modelo
     doc = ezdxf.readfile(title_file)
     msp = doc.modelspace()
 
-    points = []
-    lines = []
-    polines = []
-    Elems = []
-    n_elems_init = 0
-    for e in msp:
-        if e.dxftype() == "POINT":
-            v = list(e.dxf.location)
-            points.append([e.dxf.layer, v[0], v[1], v[2]])
-        if e.dxftype() == "LINE":
-            lines.append([e.dxf.layer, list(e.dxf.start), list(e.dxf.end)])
-        if e.dxftype() == "LWPOLYLINE":
-            vpoli = list(e.vertices_in_wcs())
-            polines.append([e.dxf.layer, list(vpoli[0]), list(vpoli[1]), list(vpoli[2]), list(vpoli[3])])
-
-    Nodes = []
+    # Inicializar listas para almacenar diferentes tipos de datos
+    points, lines, polylines, elements, diaphragms = [], [], [], [], []
+    nodes, rest = [], []
     tag_nodes = 0
+    n_elems_init = 0
 
-    for p in points:
-        if p[0].split("_")[2] == "centrales":
-            Nodes.append([tag_nodes, p[1], p[2], p[3], 1])
-            tag_nodes += 1
-        elif p[0].split("_")[2] == "esquinero":
-            Nodes.append([tag_nodes, p[1], p[2], p[3], 0.5])
-            tag_nodes += 1
-        elif p[0].split("_")[2] == "externo":
-            Nodes.append([tag_nodes, p[1], p[2], p[3], 0.25])
-            tag_nodes += 1
+    # Procesar entidades del DXF
+    for entity in msp:
+        if entity.dxftype() == "POINT":
+            location = list(entity.dxf.location)
+            points.append([entity.dxf.layer, *location])
+        elif entity.dxftype() == "LINE":
+            lines.append([entity.dxf.layer, list(entity.dxf.start), list(entity.dxf.end)])
+        elif entity.dxftype() == "LWPOLYLINE":
+            vertices = list(entity.vertices_in_wcs())
+            polylines.append([entity.dxf.layer] + [list(vertex) for vertex in vertices])
 
-    for li in lines:
-        li[1][0] = round(li[1][0], 3)
-        li[1][1] = round(li[1][1], 3)
-        li[1][2] = round(li[1][2], 3)
-        li[2][0] = round(li[2][0], 3)
-        li[2][1] = round(li[2][1], 3)
-        li[2][2] = round(li[2][2], 3) 
-        for nd in Nodes:
-            coord = [round(float(nd[1]), 3), round(float(nd[2]), 3), round(float(nd[3]), 3)]
-            if li[1] == coord:
-                li[1] = int(nd[0])
-            elif li[2] == coord:
-                li[2] = int(nd[0])
+    # Crear nodos a partir de puntos
+    for point in points:
+        # Identificar tipo de nodo a partir del nombre de la capa
+        node_type = point[0].split("_")[2]
+        node_mass = {"centrales": 1, "esquinero": 0.5, "externo": 0.25}.get(node_type, 1)
+        
+        # Agregar nodo a la lista
+        nodes.append([tag_nodes, point[1], point[2], point[3], node_mass])
+        tag_nodes += 1
 
-    for pol in polines:
-        pol[1][0] = round(pol[1][0], 3)
-        pol[1][1] = round(pol[1][1], 3)
-        pol[1][2] = round(pol[1][2], 3)
-        pol[2][0] = round(pol[2][0], 3)
-        pol[2][1] = round(pol[2][1], 3)
-        pol[2][2] = round(pol[2][2], 3)
-        pol[3][0] = round(pol[3][0], 3)
-        pol[3][1] = round(pol[3][1], 3)
-        pol[3][2] = round(pol[3][2], 3)
-        pol[4][0] = round(pol[4][0], 3)
-        pol[4][1] = round(pol[4][1], 3)
-        pol[4][2] = round(pol[4][2], 3) 
-        for nd in Nodes:
-            coord = [round(float(nd[1]), 3), round(float(nd[2]), 3), round(float(nd[3]), 3)]
-            if pol[1] == coord:
-                pol[1] = int(nd[0])
-            elif pol[2] == coord:
-                pol[2] = int(nd[0])
-            elif pol[3] == coord:
-                pol[3] = int(nd[0])
-            elif pol[4] == coord:
-                pol[4] = int(nd[0])
+    # Función para redondear coordenadas de una lista
+    def round_coordinates(coords):
+        return [round(coord, 3) for coord in coords]
 
-    Col = []
-    Vig = []
-    for l in lines:
-        if l[0].split("_")[1] == "C":
-            Col.append([float(l[0].split("_")[2]), float(l[0].split("_")[3])])
-            Elems.append([n_elems_init, l[1], l[2], float(l[0].split("_")[2]), float(l[0].split("_")[3]), 1, 1])
-            n_elems_init = n_elems_init +1
-        if l[0].split("_")[1] == "V":
-            Vig.append([float(l[0].split("_")[2]), float(l[0].split("_")[3])])
-            Elems.append([n_elems_init, l[1], l[2], float(l[0].split("_")[2]), float(l[0].split("_")[3]), 2, 2])
-            n_elems_init = n_elems_init +1
+    # Asignar nodos a líneas
+    for line in lines:
+        line[1] = round_coordinates(line[1])
+        line[2] = round_coordinates(line[2])
+        
+        for node in nodes:
+            coord = round_coordinates(node[1:4])
+            if line[1] == coord:
+                line[1] = int(node[0])
+            elif line[2] == coord:
+                line[2] = int(node[0])
 
-    nsec_vig = len(Vig) 
-    nsec_col = len(Col)
+    # Asignar nodos a polilíneas
+    for polyline in polylines:
+        for i in range(1, 5):
+            polyline[i] = round_coordinates(polyline[i])
+        
+        for node in nodes:
+            coord = round_coordinates(node[1:4])
+            for i in range(1, 5):
+                if polyline[i] == coord:
+                    polyline[i] = int(node[0])
 
-    for pl in polines:
-        if pl[0].split("_")[1] == "Mx":
-            Elems.append([n_elems_init, pl[1], pl[2], pl[3], pl[4], 3, float(pl[0].split("_")[2])])
-            n_elems_init = n_elems_init +1
-        if pl[0].split("_")[1] == "My":
-            Elems.append([n_elems_init, pl[1], pl[2], pl[3], pl[4], 4, float(pl[0].split("_")[2])])
-            n_elems_init = n_elems_init +1
+    # Procesar elementos de columnas y vigas
+    columns, beams = [], []
+    for line in lines:
+        element_type = line[0].split("_")[1]
+        dimensions = [float(line[0].split("_")[2]), float(line[0].split("_")[3])]
 
-    for node in Nodes:
+        if element_type == "C":
+            columns.append(dimensions)
+            elements.append([n_elems_init, line[1], line[2], *dimensions, 1, 1])
+        elif element_type == "V":
+            beams.append(dimensions)
+            elements.append([n_elems_init, line[1], line[2], *dimensions, 2, 2])
+        
+        n_elems_init += 1
+
+    # Procesar elementos de muros
+    for polyline in polylines:
+        wall_type = polyline[0].split("_")[1]
+        if wall_type in ["Mx", "My"]:
+            elements.append([n_elems_init, polyline[1], polyline[2], polyline[3], polyline[4], 3 if wall_type == "Mx" else 4, float(polyline[0].split("_")[2])])
+            n_elems_init += 1
+
+    # Redondear y obtener valores absolutos de las coordenadas de los nodos
+    for node in nodes:
         node[1:4] = [abs(round(coord, 2)) for coord in node[1:4]]
 
+    # Identificar y guardar nodos en el nivel cero
+    rest = [node for node in nodes if node[3] == 0]
+
+    # Calcular el centro de masa para cada nivel
+    levels = sorted(set(node[3] for node in nodes))  # Obtener niveles únicos (coordenada Z)
+    for i, level in enumerate(levels):
+        level_nodes = [node for node in nodes if node[3] == level]
+        total_mass = sum(node[4] for node in level_nodes)
+        x_cm = sum(node[1] * node[4] for node in level_nodes) / total_mass
+        y_cm = sum(node[2] * node[4] for node in level_nodes) / total_mass
+        diaphragms.append([1000 + i, round(x_cm, 2), round(y_cm, 2), level])
+
+    diaphragms.pop(0)  # Eliminar el primer elemento de la lista de diafragmas
+
+    # Calcular el área de planta
+    def calcular_area_planta(nodes):
+        # Usar el método del polígono (Shoelace formula) para calcular el área
+        level_nodes = sorted(nodes, key=lambda x: (x[1], x[2]))  # Ordenar nodos por coordenadas
+        x_coords = [node[1] for node in level_nodes]
+        y_coords = [node[2] for node in level_nodes]
+        
+        area = 0.5 * abs(sum(x_coords[i] * y_coords[i+1] - y_coords[i] * x_coords[i+1] for i in range(-1, len(level_nodes)-1)))
+        return round(area, 2)
+
+    area_planta = calcular_area_planta([node for node in nodes if node[3] == levels[0]])  # Área del nivel base
+
+    # Retornar los resultados como un diccionario
     return {
-        "Nodes": Nodes,
-        "Elems": Elems,
-        "sec_vig": Vig,
-        "sec_col": Col,
-        "nsec_sec_vig": nsec_vig,
-        "nsec_sec_col": nsec_col
+        "Nodes": nodes,
+        "Elems": elements,
+        "sec_vig": beams,
+        "sec_col": columns,
+        "nsec_vig": len(beams),
+        "nsec_col": len(columns),
+        "Diap": diaphragms,
+        "AreaPlanta": area_planta,
+        "Rest_node": rest,
+        "Levels": levels
     }
