@@ -7,6 +7,9 @@ env/
 venv/
 .venv/
 
+# docs
+docs/
+
 # Archivos de configuración de VSCode
 .vscode/
 

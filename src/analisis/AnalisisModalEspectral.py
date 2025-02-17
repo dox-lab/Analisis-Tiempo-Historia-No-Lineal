@@ -49,7 +49,7 @@ class AnalisisModalEspectral:
         unit_x[0::3], unit_y[1::3], unit_rz[2::3] = 1, 1, 1
 
         # Cálculo de las respuestas modales espectrales
-        for j in range(self.num_modos):
+        for j in range(len(self.modos)):
             force_x = self.modos[j].T @ self.matriz_masas @ unit_x
             force_y = self.modos[j].T @ self.matriz_masas @ unit_y
 

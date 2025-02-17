@@ -1,10 +1,5 @@
 from unidades import *
 
-# Definición de propiedades de materiales y secciones
-# fc = 210 * kgf / cm**2
-# E = 15100 * (fc / (kgf / cm**2))**0.5 * kgf / cm**2
-# G = 0.5 * E / (1 + 0.2)
-
 # Propiedades del acero
 fy = 4200 * kgf / cm**2  # Límite de fluencia del acero
 Es = 2.1 * 10**6 * kgf / cm**2  # Módulo de elasticidad del acero

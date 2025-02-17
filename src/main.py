@@ -275,30 +275,6 @@ outFile = f"{GMdir}/{GMfile}.g3"  # Output file
 dt, npts= ReadRecord(inFile, outFile)  # Ensure this function is implemented in Python
 # Read the file line by line and extract all numerical values into a list
 
-# signal_data = []
-
-# with open(outFile, 'r') as file:
-#     for line in file:
-#         # Split the line into individual numbers and convert them to float
-#         numbers = line.split()
-#         signal_data.extend([float(num) for num in numbers])
-
-# # Convert the list to a NumPy array for further processing
-# signal = np.array(signal_data)
-
-# # Create a time vector assuming a dt of 0.005 seconds
-# time = np.arange(0, len(signal) * dt, dt)
-
-# # Plot the seismic signal
-# plt.figure(figsize=(10, 6))
-# plt.plot(time, signal, label="Señal sísmica")
-# plt.title("Señal Sísmica - Aceleración vs Tiempo")
-# plt.xlabel("Tiempo (s)")
-# plt.ylabel("Aceleración (g)")
-# plt.grid(True)
-# plt.legend()
-# plt.show()
-
 GMfatt = g * GMfact  # Datos del archivo de entrada en unidades de g -- aceleración
 ops.timeSeries('Path', IDloadTag, '-dt', dt, '-filePath', outFile, '-factor', GMfatt) # define acceleration vector from file (dt=0.005 is associated with the input file gm)
 ops.pattern("UniformExcitation", IDloadTag, GMdirection, "-accel", IDloadTag)  # Crear excitación uniforme
