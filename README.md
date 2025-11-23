@@ -84,7 +84,7 @@ La documentación completa del proyecto, incluyendo la metodología y los result
 
 ## Contacto
 
-Para preguntas o sugerencias, puedes contactarme en [medina.daniel@pucp.edu.pe].
+Para preguntas o sugerencias, puedes contactarme en [daniel.medina@utec.edu.pe].
 
 ## Licencia
 
